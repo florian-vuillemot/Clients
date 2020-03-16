@@ -1,0 +1,8 @@
+name = "Clients"
+uuid = "f028236e-c2ae-4a53-b6e2-e353fe398ba2"
+authors = ["vuille_f <florian.vuillemot@posteo.net>"]
+version = "0.1.0"
+
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
