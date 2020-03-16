@@ -4,117 +4,93 @@ using Dates
 using Clients
 
 
-@testset "Client" begin
-    @testset "Constructor" begin
-        name = "foo"
+name = "foo"
 
-        @testset "From name" begin
-            client = Clients.Client(name)
+@testset "Constructor" begin
+    @testset "From name" begin
+        client = Clients.Client{Int}(name)
 
-            @test client.name == name
-            @test client.dateofbirthday == nothing
-        end
-
-        @testset "With all parameters" begin
-            dateofbirthday = Date(2019)
-            client = Clients.Client(name, dateofbirthday=dateofbirthday)
-
-            @test client.name == name
-            @test client.dateofbirthday == dateofbirthday
-        end
-    end
-end;
-
-
-@testset "Horse Owner" begin
-    name = "foo"
-
-    @testset "Constructor" begin
-        @testset "From name" begin
-            horseowner = Clients.HorseOwner{Int}(name)
-
-            @test horseowner.name == name
-            @test horseowner.dateofbirthday == nothing
-            @test length(horseowner.horses) == 0
-        end
-
-        @testset "With birthday" begin
-            dateofbirthday = Date(2019)
-
-            horseowner = Clients.HorseOwner{Int}(name; dateofbirthday=dateofbirthday)
-
-            @test horseowner.name == name
-            @test horseowner.dateofbirthday == dateofbirthday
-            @test length(horseowner.horses) == 0
-        end
-
-        @testset "With Horses" begin
-            nbhorses = 5
-            dateofbirthday = Date(2019)
-            horses = Set{Int}(1:nbhorses)
-
-            horseowner = Clients.HorseOwner{Int}(name; dateofbirthday=dateofbirthday, horses=horses)
-
-            @test horseowner.name == name
-            @test horseowner.dateofbirthday == dateofbirthday
-            @test length(horseowner.horses) == nbhorses
-        end
+        @test client.name == name
+        @test client.dateofbirthday == nothing
+        @test length(client.horses) == 0
     end
 
-    @testset "Add Horse(s)" begin
-        @testset "One" begin
-            horseowner = Clients.HorseOwner{Int}(name)
+    @testset "With birthday" begin
+        dateofbirthday = Date(2019)
 
-            Clients.addhorse!(horseowner, 42)
-            @test length(horseowner.horses) == 1
-        end
+        client = Clients.Client{Int}(name; dateofbirthday=dateofbirthday)
 
-        @testset "Multiple" begin
-            horseowner = Clients.HorseOwner{Int}(name)
-
-            Clients.addhorse!(horseowner, 42)
-            Clients.addhorse!(horseowner, 84)
-            @test length(horseowner.horses) == 2
-        end
-
-        @testset "Multiple in once" begin
-            horseowner = Clients.HorseOwner{Int}(name)
-
-            Clients.addhorses!(horseowner, [42, 84])
-            @test length(horseowner.horses) == 2
-        end
-
-        @testset "Ensure no double" begin
-            horseowner = Clients.HorseOwner{Int}(name)
-
-            Clients.addhorses!(horseowner, [42, 42])
-            @test length(horseowner.horses) == 1
-        end
+        @test client.name == name
+        @test client.dateofbirthday == dateofbirthday
+        @test length(client.horses) == 0
     end
 
-    @testset "Remove horse(s)" begin
-        @testset "One" begin
-            horses = Set{Int}([42, 84])
-            horseowner = Clients.HorseOwner{Int}(name; horses=horses)
+    @testset "With Horses" begin
+        nbhorses = 5
+        dateofbirthday = Date(2019)
+        horses = Set{Int}(1:nbhorses)
 
-            Clients.removehorse!(horseowner, 42)
-            @test length(horseowner.horses) == 1
-        end
+        client = Clients.Client{Int}(name; dateofbirthday=dateofbirthday, horses=horses)
 
-        @testset "Multiple" begin
-            horses = [42, 84]
-            horseowner = Clients.HorseOwner{Int}(name; horses=Set{Int}(horses))
+        @test client.name == name
+        @test client.dateofbirthday == dateofbirthday
+        @test length(client.horses) == nbhorses
+    end
+end
 
-            Clients.removehorses!(horseowner, horses)
-            @test length(horseowner.horses) == 0
-        end
+@testset "Add Horse(s)" begin
+    @testset "One" begin
+        client = Clients.Client{Int}(name)
 
-        @testset "Not found" begin
-            horses = Set{Int}([42, 84])
-            horseowner = Clients.HorseOwner{Int}(name; horses=horses)
+        Clients.addhorse!(client, 42)
+        @test length(client.horses) == 1
+    end
 
-            Clients.removehorse!(horseowner, 0)
-            @test length(horseowner.horses) == 2
-        end
+    @testset "Multiple" begin
+        client = Clients.Client{Int}(name)
+
+        Clients.addhorse!(client, 42)
+        Clients.addhorse!(client, 84)
+        @test length(client.horses) == 2
+    end
+
+    @testset "Multiple in once" begin
+        client = Clients.Client{Int}(name)
+
+        Clients.addhorses!(client, [42, 84])
+        @test length(client.horses) == 2
+    end
+
+    @testset "Ensure no double" begin
+        client = Clients.Client{Int}(name)
+
+        Clients.addhorses!(client, [42, 42])
+        @test length(client.horses) == 1
+    end
+end
+
+@testset "Remove horse(s)" begin
+    @testset "One" begin
+        horses = Set{Int}([42, 84])
+        client = Clients.Client{Int}(name; horses=horses)
+
+        Clients.removehorse!(client, 42)
+        @test length(client.horses) == 1
+    end
+
+    @testset "Multiple" begin
+        horses = [42, 84]
+        client = Clients.Client{Int}(name; horses=Set{Int}(horses))
+
+        Clients.removehorses!(client, horses)
+        @test length(client.horses) == 0
+    end
+
+    @testset "Not found" begin
+        horses = Set{Int}([42, 84])
+        client = Clients.Client{Int}(name; horses=horses)
+
+        Clients.removehorse!(client, 0)
+        @test length(client.horses) == 2
     end
 end
