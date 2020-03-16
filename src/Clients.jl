@@ -20,7 +20,7 @@ struct Client <: Person
     name::String
     dateofbirthday::Union{Date, Nothing}
 
-    Client(name, dateofbirthday=nothing) = new(name, dateofbirthday)
+    Client(name; dateofbirthday=nothing) = new(name, dateofbirthday)
 end
 
 
@@ -34,7 +34,7 @@ struct HorseOwner{Horse} <: Person
     dateofbirthday::Union{Date, Nothing}
     horses::Set{Horse}
 
-    HorseOwner{Horse}(name, dateofbirthday=nothing, horses=Set{Horse}()) where {Horse} = new(name, dateofbirthday, horses)
+    HorseOwner{Horse}(name; dateofbirthday=nothing, horses=Set{Horse}()) where {Horse} = new(name, dateofbirthday, horses)
 end
 
 function addhorses!(owner::HorseOwner, horses::Vector{Horse})::HorseOwner where Horse
@@ -44,6 +44,16 @@ end
 
 function addhorse!(owner::HorseOwner, horse::Horse)::HorseOwner where Horse
     push!(owner.horses, horse)
+    owner
+end
+
+function removehorses!(owner::HorseOwner, horses::Vector{Horse})::HorseOwner where Horse
+    map(horse -> removehorse!(owner, horse), horses)
+    owner
+end
+
+function removehorse!(owner::HorseOwner, horse::Horse)::HorseOwner where Horse
+    delete!(owner.horses, horse)
     owner
 end
 
