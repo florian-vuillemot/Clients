@@ -32,9 +32,19 @@ A client with horse(s)
 struct HorseOwner{Horse} <: Person
     name::String
     dateofbirthday::Union{Date, Nothing}
-    horses::Vector{Horse}
+    horses::Set{Horse}
 
-    HorseOwner{Horse}(name, dateofbirthday=nothing, horses=Vector{Horse}()) where {Horse} = new(name, dateofbirthday, horses)
+    HorseOwner{Horse}(name, dateofbirthday=nothing, horses=Set{Horse}()) where {Horse} = new(name, dateofbirthday, horses)
+end
+
+function addhorses!(owner::HorseOwner, horses::Vector{Horse})::HorseOwner where Horse
+    map(horse -> addhorse!(owner, horse), horses)
+    owner
+end
+
+function addhorse!(owner::HorseOwner, horse::Horse)::HorseOwner where Horse
+    push!(owner.horses, horse)
+    owner
 end
 
 end
