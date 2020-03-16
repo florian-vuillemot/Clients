@@ -22,3 +22,39 @@ using Clients
         @test client.dateofbirthday == dateofbirthday
     end
 end;
+
+
+@testset "Create a Horse Owner" begin
+    name = "foo"
+
+
+    @testset "From name" begin
+        horseowner = Clients.HorseOwner{Int}(name)
+
+        @test horseowner.name == name
+        @test horseowner.dateofbirthday == nothing
+        @test length(horseowner.horses) == 0
+    end
+
+    @testset "With birthday" begin
+        dateofbirthday = Date(2019)
+
+        horseowner = Clients.HorseOwner{Int}(name, dateofbirthday)
+
+        @test horseowner.name == name
+        @test horseowner.dateofbirthday == dateofbirthday
+        @test length(horseowner.horses) == 0
+    end
+
+    @testset "With Horses" begin
+        nbhorses = 5
+        dateofbirthday = Date(2019)
+        horses = Vector{Int}(1:nbhorses)
+
+        horseowner = Clients.HorseOwner{Int}(name, dateofbirthday, horses)
+
+        @test horseowner.name == name
+        @test horseowner.dateofbirthday == dateofbirthday
+        @test length(horseowner.horses) == nbhorses
+    end
+end

@@ -20,15 +20,21 @@ struct Client <: Person
     name::String
     dateofbirthday::Union{Date, Nothing}
 
-    Client(name) = new(name, nothing)
-    Client(name, dateofbirthday) = new(name, dateofbirthday)
+    Client(name, dateofbirthday=nothing) = new(name, dateofbirthday)
 end
 
 
+"""
+    HorseOwner{Horse}(name)
+
+A client with horse(s)
+"""
 struct HorseOwner{Horse} <: Person
     name::String
     dateofbirthday::Union{Date, Nothing}
     horses::Vector{Horse}
+
+    HorseOwner{Horse}(name, dateofbirthday=nothing, horses=Vector{Horse}()) where {Horse} = new(name, dateofbirthday, horses)
 end
 
 end
